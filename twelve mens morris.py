@@ -1,6 +1,6 @@
 # CITS1401 Semester 1 2015, Project 2
-# Student 1 Name: Harrison Marley                      Student no:
-# Student 2 Name: Mathew Somethingarather                      Student no:
+# Student 1 Name:    Harrison Marley    Student no: 21522889
+# Student 2 Name:    Matt Cooper          Student no:
 # Twelve Men's Morris
 
 from graphics import *
@@ -10,8 +10,6 @@ from math import *
 
 wSize = 600
 allLocs = []
-
-
 
 class Player:
 	def __init__(self,Colour,Player_number):
