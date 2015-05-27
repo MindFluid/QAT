@@ -1,6 +1,6 @@
 # CITS1401 Semester 1 2015, Project 2
-# Student 1 Name:                       Student no:
-# Student 2 Name:                       Student no:
+# Student 1 Name: Harrison Marley                      Student no:
+# Student 2 Name: Mathew Somethingarather                      Student no:
 # Twelve Men's Morris
 
 from graphics import *
