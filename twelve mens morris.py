@@ -64,6 +64,7 @@ def main():
 				#removePiece(win, ptList, Player_2.Circles, Player_2.Occup, unOccup)
 			if isLine(Player_1.Occup, Player_1.linesOccup) == True:
 				print('Mill detected')
+				removePiece(win, ptList, Player_2.Circles, Player_2.Occup, unOccup)
 			else:
 				print('No mill')
 			Player_1_index += 1
@@ -72,8 +73,14 @@ def main():
 			Player_turn -= 1
 
 		else:
+			print('This should be an AI move')
 			movePiece(win, ptList, Player_2_index, Player_2.cColour, Player_2.Circles, Player_2, Player_1.Occup, unOccup)
 			Player_2_index += 1
+			if isLine(Player_1.Occup, Player_2.linesOccup) == True:
+				print('Mill detected')
+				removePiece(win, ptList, Player_1.Circles, Player_1.Occup, unOccup)
+			else:
+				print('No mill')
 			if Player_2_index > 11:
 				Player_2_index = 11
 			Player_turn += 1
@@ -230,19 +237,13 @@ def movePiece(win, ptList, circle_index, cColor, Circles, Player, Occup, unOccup
 
 			for k in range(len(Occup)):
 				for j in Occup[k]:
-					if (ptList[k][j].getX() == nn.x and ptList[k][j].getY() == nn.y):
+					if (ptList[k][j].x == nn.x and ptList[k][j].y == nn.y):
 						print('found another object at this location')
 
 						for index in range(len(Circles)):
 							a = Circles[i].getCenter()
 							if (a.getX() == nn.x and a.getY() == nn.y):
 								Circles[index].setOutline('red')
-
-
-
-
-
-
 
 	#return [] # does not return anything
 
@@ -455,6 +456,9 @@ def removePiece(win,ptList, Circles, Occup, unOccup):#Player,Occup,unOccup,lines
 def AImove(win,ptList,cColor,Player,Occup,linesOccup,Circles,unOccup):
 	# optional function for extra marks
 	# replace the random function by this so that the computer (Player 2) performs an intelligent move
+
+
+
 	return []
 
 
