@@ -223,9 +223,9 @@ def movePiece(win, ptList, circle_index, cColor, Circles, Player, Occup, unOccup
 							print('!!!could not remove from unOccup!!!')
 
 					else:
-						print('grrr')
+						#print('grrr')
 						continue
-
+			break
 
 		#look for a click on the Player's own circle to attempt a move
 		else:
