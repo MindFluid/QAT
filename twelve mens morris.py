@@ -63,11 +63,15 @@ def main():
 			#if isLine(Player_1.Occup, linesOccup) == True:
 				#removePiece(win, ptList, Player_2.Circles, Player_2.Occup, unOccup)
 			Player_1_index += 1
+			if Player_1_index > 11:
+				Player_1_index = 11
 			Player_turn -= 1
 
 		else:
 			movePiece(win, ptList, Player_2_index, Player_2.cColour, Player_2.Circles, Player_2, Player_1.Occup, unOccup)
 			Player_2_index += 1
+			if Player_2_index > 11:
+				Player_2_index = 11
 			Player_turn += 1
 
 
@@ -218,14 +222,15 @@ def movePiece(win, ptList, circle_index, cColor, Circles, Player, Occup, unOccup
 						try:
 							unOccup.remove(pt_index)
 							print('removed from unOcupp')
-							break
+							return #returns nothing
 						except:
 							print('!!!could not remove from unOccup!!!')
 
 					else:
 						#print('grrr')
 						continue
-			break
+
+			continue
 
 		#look for a click on the Player's own circle to attempt a move
 		else:
