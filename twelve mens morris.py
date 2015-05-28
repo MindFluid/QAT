@@ -62,6 +62,10 @@ def main():
 			movePiece(win, ptList, Player_1_index, Player_1.cColour, Player_1.Circles, Player_1, Player_2.Occup, unOccup)
 			#if isLine(Player_1.Occup, linesOccup) == True:
 				#removePiece(win, ptList, Player_2.Circles, Player_2.Occup, unOccup)
+			if isLine(Player_1.Occup, Player_1.linesOccup) == True:
+				print('Mill detected')
+			else:
+				print('No mill')
 			Player_1_index += 1
 			if Player_1_index > 11:
 				Player_1_index = 11
