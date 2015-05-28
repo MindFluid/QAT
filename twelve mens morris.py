@@ -89,6 +89,7 @@ def main():
 	win.mainloop()
 
 
+
 def searchForMoves(points, unOccup):
 # Written by Mathew Cooper 20933403 May 2015.
 # This function imports the list of all the points adjacent to the points that currently hold game pieces, 'points'.
@@ -314,6 +315,44 @@ def findNN(pt, ptList):
 
 	return nn, minDist, pt_index
 
+def isLineReturn(Occup):
+
+	CornerList = [[[0, 1], [0, 2], [0, 3]], [[0, 3], [0, 4], [0, 5]], [[0, 5], [0, 6], [0, 7]],[[0, 7], [0, 0], [0, 1]],  # Outer square corners.
+				  [[1, 1], [1, 2], [1, 3]], [[1, 3], [1, 4], [1, 5]], [[1, 5], [1, 6], [1, 7]],[[1, 7], [1, 0], [1, 1]],  # Center square corners.
+				  [[2, 1], [2, 2], [2, 3]], [[2, 3], [2, 4], [2, 5]], [[2, 5], [2, 6], [2, 7]],[[2, 7], [2, 0], [2, 1]]]  # Inner square corners.
+
+	# This loop searches the a player's Occup list for any and all mills, it creates a list of mills called "linesOccup".
+	linesOccupNew = []  # The list of mills after a player makes their move. This will be filled in by this function.
+
+	if (len(Occup) < 3):
+		linesOccupNew = []
+		return linesOccupNew
+
+	else:
+		# A mill is created when 1 of 2 conditions is met.
+		# Mill case 1: Constant x, Changing y.
+		for i in range(len(Occup)):
+			[x, y] = Occup[i]  # The method I am using to refer to the first co-ordinate of each pair in Occup.
+			a = ([x, (y + 1) % 8] in Occup)
+			b = ([x, (y + 2) % 8] in Occup)
+
+			# Testing whether of not the second point and the third point of a mill are owned by the player.
+			if ((a == True) and (b == True)):
+				mill = [[x, y], [x, (y + 1) % 8], [x, (y + 2) % 8]]
+				if ((mill in CornerList) == False):  # Making sure that the calculated mill is not a corner.
+					linesOccupNew.append(mill)  # If a mill is present, add it to the list "linesOccupNew".
+
+		# Mill case 2: Changing x (here called "q"),  Constant y (here called "w").
+		for j in range(len(Occup)):
+			[q, w] = Occup[j]  # The method I am using to refer to the first co-ordinate of each pair in Occup.
+			c = ([(q + 1), w] in Occup)
+			d = ([(q + 2), w] in Occup)
+			# Testing whether of not the second point and the third point of a mill are owned by the player.
+			if ((c == True) and (d == True)):
+				mill = [[q, w], [(q + 1), w], [(q + 2), w]]
+				linesOccupNew.append(mill)  # If a mill is present, add it to the list "linesOccupNew".
+
+		return linesOccupNew
 
 def isLine(Occup, linesOccup):
 
