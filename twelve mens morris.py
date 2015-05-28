@@ -208,7 +208,7 @@ def movePiece(win, ptList, circle_index, cColor, Circles, Player, Occup, unOccup
 			#This loop is supposed to check the list unOccup (a list of unoccupied points) and if it
 			#matches a spot, draw the circle
 			for k in range(len(unOccup)):
-					if unOccup[k] == [pt_index]:
+					if unOccup[k] == pt_index:
 						print('No object here')
 						print(pt_index)
 
