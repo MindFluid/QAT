@@ -181,8 +181,6 @@ def movePiece(win, ptList, circle_index, cColor, Circles, Player, Occup, unOccup
 		pt = win.getMouse()
 		nn, minDist, pt_index = findNN(pt, ptList)
 
-		#splitting 2D index to be assigned to Occup's index variables respectively
-
 
 		'''#test statements
 		print('Clicked at: ', pt)
@@ -197,13 +195,6 @@ def movePiece(win, ptList, circle_index, cColor, Circles, Player, Occup, unOccup
 
 		#if all circles have not been placed (each player has 12), continue to allow user to draw circles for player
 		elif len(Circles) < 12:
-			#loops checks selected point for other Circles
-			'''for k in range(len(Occup)):
-				for j in Occup[k]:
-					if (ptList[k][j].getX() == nn.x and ptList[k][j].getY() == nn.y):
-						print('found another object at this location')
-						occupiedPoint = True
-						break'''
 
 			#This loop is supposed to check the list unOccup (a list of unoccupied points) and if it
 			#matches a spot, draw the circle
@@ -227,35 +218,13 @@ def movePiece(win, ptList, circle_index, cColor, Circles, Player, Occup, unOccup
 						try:
 							unOccup.remove(pt_index)
 							print('removed from unOcupp')
+							break
 						except:
 							print('!!!could not remove from unOccup!!!')
-						break
 
 					else:
 						print('grrr')
 						continue
-
-
-			'''else: #draw the circle
-				circ = Circle(nn, 20)
-				circ.setFill(cColor)
-				Circles.append(circ)
-
-				#print statements for test purposes
-				print('circles list length: ', len(Circles))
-				print('Circle Object: ', Circles[circle_index])
-				print('circle_index: ', circle_index)
-				Circles[circle_index].draw(win)
-
-				#update Occup and unOccup
-				Player.Occup.append(pt_index)
-				try:
-					unOccup.remove(pt_index)
-					print('removed from unOcupp')
-				except:
-					print('!!!could not remove from unOccup!!!')
-					continue'''
-
 
 
 		#look for a click on the Player's own circle to attempt a move
