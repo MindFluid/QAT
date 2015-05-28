@@ -330,7 +330,7 @@ def findNN(pt, ptList):
 	distCheck = 0
 	minDist = -1
 	nn = ptList[0][0]
-	pt_index = []
+	pt_index = [0, 0]
 	for x in range(len(ptList)):
 		for y in range(len(ptList[x])):
 			dist = sqrt(square(ptList[x][y].getX() - pt.getX()) + square(ptList[x][y].getY() - pt.getY()))
