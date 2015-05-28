@@ -85,90 +85,73 @@ def searchForMoves(points, unOccup):
 # Each iteration of the loop searches through the list of unoccupied spaces, 'UnOccup', for one of the points in 'points'.
 
 # If a point is found to be in both 'points' and 'UnOccup', it means that the player has an available move.
-# If such a point is found, the loop ends and the function returns the variable "result" that stores the value "False".
+# If such a point is found, the loop ends and the function returns False.
 # This ultimately results in the "blocked" function concluding that the user is not blocked and the game can continue.
 
 # If the function completes the loop iterations without finding an available opening,
 # the function returns the variable "result" that stores the value "True", that signifies that the player is blocked.
 # This ultimately results in the "blocked" function concluding that the user is blocked and the game ends.
 
-	# Initialising loop variable.
-	j = 0
 	# Setting up the while loop that searched 'UnOccup' one point at a time.
-	while j < len(points):
-		# Testing if the point for this loop is in 'UnOccup'.
-		trap = (points[j] in unOccup)
 
+	for j in range(len(points)):
+		# Testing if the point for this loop is in 'UnOccup'.
+		moveAvailable = (points[j] in unOccup)
+		print(points)
+		print(points[j])
+		print(moveAvailable)
 		# If the point is in 'UnOccup', end the function and return that the player is not blocked.
-		if (trap == True):
-				result = False
-				return result
-		# If the point is not in 'UnOccup', continue the loop iterations until you find a valid point, or the loop condition is met.
-		# If no suitable point is found before the iterations end, return that the user is blocked.
-		if(trap == False):
-				result = True
-				j = j+1
-	return result
+		if (moveAvailable == True):
+			return True
+	return False
 
 def blocked(Occup, unOccup):
-# Written by Mathew Cooper 20933403 May 2015.
-	# Occup is a list of occupied points/locations by a Player and unOccup are free locations
-	# returns True if all pieces of the Player are blocked otherwise Fals
+	# Written by Mathew Cooper 20933403 May 2015.
+    # Occup is a list of occupied points/locations by a Player and unOccup are free locations
+    # returns True if all pieces of the Player are blocked otherwise Fals
+	points = []
 
-	for i in range (len(Occup)):
-			# Test each of the 3 possible co-ordinate points adjacent to a point in the outer square.
-			if (Occup[i][0] == 0):
-					# Establish point of interest.
-					[a,b] = Occup[i]
-					# Calculate adjacent points.
-					points = [ [a,(b-1)%8], [a+1,b],[a,(b+1)%8] ] # Confirmed to correctly calculate adjacent points.
-					#print([a,b])
-					#print(points,"point0")
-					# Search for points in unOccup to see if any moves are available.
-					result = searchForMoves(points, unOccup)
-					if result == False:
-						return False
+	if (((len(Occup))<0) or (len(unOccup)) > 24):		# If you have no pieces on the board then you should have either already gotten a game over message, or the game has just started.
+		return False
 
+	else:
+		for j in range (len(Occup)):
 
-					i = 1 + 1
-			# Test each of the 4 possible co-ordinate points adjacent to a point in the middle square.
-			elif(Occup[i][0] == 1):
-					# Establish point of interest.
-					[x,y] = Occup[i]
-					# Calculate adjacent points.
-					points = [ [x+1,y], [x-1,y], [x,(y+1)%8],[x,(y-1)%8] ] # Confirmed to correctly calculate adjacent points.
-					#print([x,y])
-					#print(points,"point1")
-					#print(points)
-					# Search for points in unOccup to see if any moves are available.
-					result = searchForMoves(points, unOccup)
-					if result == False:
-							return False
+			if((Occup[j][0] == 0)):
+				#print(Occup[j][0])
+				# Test each of the 3 possible co-ordinate points adjacent to a point in the outer square.
+				# Establish point of interest.
+				[a,b] = Occup[j]
+				#print([a,b])
+				# Calculate adjacent points.
+				points = [[a,(b-1)%8], [a+1,b],[a,(b+1)%8]] # Confirmed to correctly calculate adjacent points.
+				result = searchForMoves(points, unOccup)
+				if (result == True):
+					return False
 
+				# Test each of the 4 possible co-ordinate points adjacent to a point in the middle square.
+			elif((Occup[j][0] == 1)):
+				#print(Occup[j][0])
+				# Test each of the 3 possible co-ordinate points adjacent to a point in the outer square.
+				# Establish point of interest.
+				[c,d] = Occup[j]
+				# Calculate adjacent points.
+				points = [ [c+1,d], [c-1,d], [c,(d+1)%8],[c,(d-1)%8] ] # Confirmed to correctly calculate adjacent points.
+				result = searchForMoves(points, unOccup)
+				if (result == True):
+					return False
 
-					#print("1",result)
-					i = i+1
-					#return result
-			# Test each of the 3 possible co-ordinate points adjacent to a point in the inner square.
-			elif(Occup[i][0] == 2):
-					# Establish point of interest.
-					[c,d] = Occup[i]
-					# Calculate adjacent points.
-					points = [[c,(d+1)%8],[c-1,d],[c,(d-1)%8]] # Confirmed to correctly calculate adjacent points.
-					#print([c,d])
-					#print(points,"point2")
-					# Search for points in unOccup to see if any moves are available.
-					result = searchForMoves(points, unOccup)
-					if (result == False):
-							return False
+			elif((Occup[j][0] == 2)):
+				# Establish point of interest.
+				[e,f] = Occup[j]
+				# Calculate adjacent points.
+				points = [[e,(f+1)%8],[e-1,f],[e,(f-1)%8]] # Confirmed to correctly calculate adjacent points.
+				result = searchForMoves(points, unOccup)
+				if (result == True):
+					return False
 
-					#print("2",result)
-					i = i+1
-					#return result
-	#print(i,"star")
-	#print(result)
+		return True
 
-	return result
 
 
 def movePiece(win, ptList, circle_index, cColor, Circles, Player, Occup, unOccup):#(win,ptList,cColor,Player,Occup,linesOccup,Circles,unOccup):
@@ -328,10 +311,70 @@ def findNN(pt, ptList):
 
 
 def isLine(Occup, linesOccup):
-	# Occup is a list of occupied locations by a Player and linesOccup are the Player's mills
-	# returns True if a line (mill) has been made with the last move and updates linesOccup (mills)
-	# otherwise returns False
-	return False
+
+	CornerList = [[[0, 1], [0, 2], [0, 3]], [[0, 3], [0, 4], [0, 5]], [[0, 5], [0, 6], [0, 7]],[[0, 7], [0, 0], [0, 1]],  # Outer square corners.
+				  [[1, 1], [1, 2], [1, 3]], [[1, 3], [1, 4], [1, 5]], [[1, 5], [1, 6], [1, 7]],[[1, 7], [1, 0], [1, 1]],  # Center square corners.
+				  [[2, 1], [2, 2], [2, 3]], [[2, 3], [2, 4], [2, 5]], [[2, 5], [2, 6], [2, 7]],[[2, 7], [2, 0], [2, 1]]]  # Inner square corners.
+
+	# This loop searches the a player's Occup list for any and all mills, it creates a list of mills called "linesOccup".
+	linesOccupNew = []  # The list of mills after a player makes their move. This will be filled in by this function.
+	linesOccupOld = linesOccup  # This allows to compare the old version of the list to the new version.
+
+
+	if (len(Occup) < 3):
+		return False
+
+	else:
+		# A mill is created when 1 of 2 conditions is met.
+		# Mill case 1: Constant x, Changing y.
+		for i in range(len(Occup)):
+			[x, y] = Occup[i]  # The method I am using to refer to the first co-ordinate of each pair in Occup.
+			a = ([x, (y + 1) % 8] in Occup)
+			b = ([x, (y + 2) % 8] in Occup)
+
+			# Testing whether of not the second point and the third point of a mill are owned by the player.
+			if ((a == True) and (b == True)):
+				mill = [[x, y], [x, (y + 1) % 8], [x, (y + 2) % 8]]
+				if ((mill in CornerList) == False):  # Making sure that the calculated mill is not a corner.
+					linesOccupNew.append(mill)  # If a mill is present, add it to the list "linesOccupNew".
+
+		# Mill case 2: Changing x (here called "q"),  Constant y (here called "w").
+		for j in range(len(Occup)):
+			[q, w] = Occup[j]  # The method I am using to refer to the first co-ordinate of each pair in Occup.
+			c = ([(q + 1), w] in Occup)
+			d = ([(q + 2), w] in Occup)
+			# Testing whether of not the second point and the third point of a mill are owned by the player.
+			if ((c == True) and (d == True)):
+				mill = [[q, w], [(q + 1), w], [(q + 2), w]]
+				linesOccupNew.append(mill)  # If a mill is present, add it to the list "linesOccupNew".
+
+		# Determining the range for the loop that establishes whether or not a new mill has been created.
+		if ((len(linesOccupNew)) > (len(linesOccupOld))):
+			f = len(linesOccupOld)
+			if (f == 0):  # There seemed to be a problem when lineOccupOld was empty (resulting in f = 0 which prevented the for loop below from executing)
+				f = f + 1  # This just tests for that event and makes the for loop (line81) loop 1 time.
+
+		elif ((len(linesOccupNew)) < (len(linesOccupOld))):
+			f = len(linesOccupNew)
+			if (f == 0):  # There seemed to be a problem when lineOccupNew was empty (resulting in f = 0 which prevented the for loop below from executing)
+				f = f + 1  # This just tests for that event and makes the for loop (line81) loop 1 time.
+		else:
+			f = len(linesOccupOld)
+			if (f == 0):  # There seemed to be a problem when lineOccupOld was empty (resulting in f = 0 which prevented the for loop below from executing)
+				f = f + 1  # This just tests for that event and makes the for loop (line81) loop 1 time.
+
+			# These print statements are just to test the outputs of each for loop DO NOT INCLUDE THEM IN THE FINAL PROGRAM.
+		#print(f, "t")
+		#print(len(Occup), "Occup")
+		#print(linesOccupOld, "linesOccupOld")
+		#print(linesOccupNew, "linesOccupNew")
+
+		# The loop that establishes whether or not a new mill has been created or not.
+		for l in range(f):
+			if ((linesOccupNew[l] in linesOccupOld) == False):
+				return True
+		return False
+
 
 
 def removePiece(win,ptList, Circles, Occup, unOccup):#Player,Occup,unOccup,linesOccup,Circles):
