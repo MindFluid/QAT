@@ -20,6 +20,7 @@ class Player:
 		self.Occup = [] # list of locations of player's pieces.
 		self.Number_of_mills = 0
 		self.linesOccup = [] # Location of player's mills
+		self.occupOld = []
 		turn = 0
 
 
@@ -62,7 +63,7 @@ def main():
 			movePiece(win, ptList, Player_1_index, Player_1.cColour, Player_1.Circles, Player_1, Player_2.Occup, unOccup)
 			#if isLine(Player_1.Occup, linesOccup) == True:
 				#removePiece(win, ptList, Player_2.Circles, Player_2.Occup, unOccup)
-			if isLine(Player_1.Occup, Player_1.linesOccup) == True:
+			if isLine(Player_1.Occup, Player_1.occupOld) == True:
 				print('Mill detected')
 				removePiece(win, ptList, Player_2.Circles, Player_2.Occup, unOccup)
 			else:
@@ -76,7 +77,7 @@ def main():
 			print('This should be an AI move')
 			movePiece(win, ptList, Player_2_index, Player_2.cColour, Player_2.Circles, Player_2, Player_1.Occup, unOccup)
 			Player_2_index += 1
-			if isLine(Player_1.Occup, Player_2.linesOccup) == True:
+			if isLine(Player_2.Occup, Player_2.occupOld) == True:
 				print('Mill detected')
 				removePiece(win, ptList, Player_1.Circles, Player_1.Occup, unOccup)
 			else:
@@ -187,13 +188,15 @@ def movePiece(win, ptList, circle_index, cColor, Circles, Player, Occup, unOccup
 		print('Distance: ', minDist)'''
 
 		#if distance is too large, a circle will not be placed
+		print('Length of Circles: ', len(Circles))
 		if minDist > 20:
 			print('Distance too great. Did not place circle')
 			continue
 
 
 		#if all circles have not been placed (each player has 12), continue to allow user to draw circles for player
-		elif len(Circles) < 12:
+
+		elif len(Circles) <= 12:
 
 			#This loop is supposed to check the list unOccup (a list of unoccupied points) and if it
 			#matches a spot, draw the circle
@@ -207,12 +210,13 @@ def movePiece(win, ptList, circle_index, cColor, Circles, Player, Occup, unOccup
 						Circles.append(circ)
 
 						#print statements for test purposes
-						print('circles list length: ', len(Circles))
-						print('Circle Object: ', Circles[circle_index])
-						print('circle_index: ', circle_index)
+						#print('circles list length: ', len(Circles))
+						#print('Circle Object: ', Circles[circle_index])
+						#print('circle_index: ', circle_index)
 						Circles[circle_index].draw(win)
 
 						#update Occup and unOccup
+						Player.occupOld = Player.Occup.copy()
 						Player.Occup.append(pt_index)
 						try:
 							unOccup.remove(pt_index)
@@ -236,15 +240,14 @@ def movePiece(win, ptList, circle_index, cColor, Circles, Player, Occup, unOccup
 			#index variable
 			i = 0
 
-			for k in range(len(Occup)):
-				for j in Occup[k]:
-					if (ptList[k][j].x == nn.x and ptList[k][j].y == nn.y):
+			for k in range(len(unOccup)):
+					if unOccup[k] == pt_index:
 						print('found another object at this location')
 
 						for index in range(len(Circles)):
 							a = Circles[i].getCenter()
 							if (a.getX() == nn.x and a.getY() == nn.y):
-								Circles[index].setOutline('red')
+								Circles[index].setFill('red')
 
 	#return [] # does not return anything
 
@@ -315,7 +318,7 @@ def findNN(pt, ptList):
 
 	return nn, minDist, pt_index
 
-def isLineReturn(Occup):
+def isLineReturn(Occup, occupOld):
 
 	CornerList = [[[0, 1], [0, 2], [0, 3]], [[0, 3], [0, 4], [0, 5]], [[0, 5], [0, 6], [0, 7]],[[0, 7], [0, 0], [0, 1]],  # Outer square corners.
 				  [[1, 1], [1, 2], [1, 3]], [[1, 3], [1, 4], [1, 5]], [[1, 5], [1, 6], [1, 7]],[[1, 7], [1, 0], [1, 1]],  # Center square corners.
@@ -340,7 +343,13 @@ def isLineReturn(Occup):
 			if ((a == True) and (b == True)):
 				mill = [[x, y], [x, (y + 1) % 8], [x, (y + 2) % 8]]
 				if ((mill in CornerList) == False):  # Making sure that the calculated mill is not a corner.
-					linesOccupNew.append(mill)  # If a mill is present, add it to the list "linesOccupNew".
+					print("MILL")
+					print(mill)
+					print("Occup")
+					print(Occup)
+					for point in mill:
+						if point not in occupOld:
+							linesOccupNew.append(mill)  # If a mill is present, add it to the list "linesOccupNew".
 
 		# Mill case 2: Changing x (here called "q"),  Constant y (here called "w").
 		for j in range(len(Occup)):
@@ -350,18 +359,39 @@ def isLineReturn(Occup):
 			# Testing whether of not the second point and the third point of a mill are owned by the player.
 			if ((c == True) and (d == True)):
 				mill = [[q, w], [(q + 1), w], [(q + 2), w]]
-				linesOccupNew.append(mill)  # If a mill is present, add it to the list "linesOccupNew".
+				print("MILL")
+				print(mill)
+				print("Occup")
+				print(Occup)
+				for point in mill:
+					if point not in occupOld:
+						linesOccupNew.append(mill)  # If a mill is present, add it to the list "linesOccupNew".
 
 		return linesOccupNew
 
-def isLine(Occup, linesOccup):
+def isLine(Occup, occupOld):
+	print("THIS IS ALL THAT IS OCCUPIED")
+	print(Occup)
+	newMills = isLineReturn(Occup, occupOld)
+	print("HERE ARE ALL 'NEW' MILLS RETURNED FROM MATTTHEW")
+	print(newMills)
+	if len(newMills) > 0:
+		print("FUCKING FUCK YES")
+		for mill in newMills:
+			print(mill)
+			#Occup.append(mill)
+		print(Occup)
+		return True
+	else:
+		print("NO")
+		return False
 
 	CornerList = [[[0, 1], [0, 2], [0, 3]], [[0, 3], [0, 4], [0, 5]], [[0, 5], [0, 6], [0, 7]],[[0, 7], [0, 0], [0, 1]],  # Outer square corners.
 				  [[1, 1], [1, 2], [1, 3]], [[1, 3], [1, 4], [1, 5]], [[1, 5], [1, 6], [1, 7]],[[1, 7], [1, 0], [1, 1]],  # Center square corners.
 				  [[2, 1], [2, 2], [2, 3]], [[2, 3], [2, 4], [2, 5]], [[2, 5], [2, 6], [2, 7]],[[2, 7], [2, 0], [2, 1]]]  # Inner square corners.
 
 	# This loop searches the a player's Occup list for any and all mills, it creates a list of mills called "linesOccup".
-	linesOccupNew = []  # The list of mills after a player makes their move. This will be filled in by this function.
+	linesOccupNew = isLineReturn(Occup)  # The list of mills after a player makes their move. This will be filled in by this function.
 	linesOccupOld = linesOccup  # This allows to compare the old version of the list to the new version.
 
 
@@ -477,7 +507,9 @@ def removePiece(win,ptList, Circles, Occup, unOccup):#Player,Occup,unOccup,lines
 	for index in range(len(Circles)):
 		a = Circles[i].getCenter()
 		if (a.getX() == nn.x and a.getY() == nn.y):
+			print('Length of Circles BEFORE undraw: ', len(Circles))
 			Circles[index].undraw()
+			print('Length of Circles AFTER undraw: ', len(Circles))
 			Occup.remove(pt_index)
 			print('removed point from Occup. Updated Occupp[]: ', Occup)
 			unOccup.append(pt_index)
