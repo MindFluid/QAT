@@ -335,12 +335,28 @@ def isLine(Occup, linesOccup):
 			[x, y] = Occup[i]  # The method I am using to refer to the first co-ordinate of each pair in Occup.
 			a = ([x, (y + 1) % 8] in Occup)
 			b = ([x, (y + 2) % 8] in Occup)
-
+			mill = [[x, y], [x, (y + 1) % 8], [x, (y + 2) % 8]]
 			# Testing whether of not the second point and the third point of a mill are owned by the player.
 			if ((a == True) and (b == True)):
-				mill = [[x, y], [x, (y + 1) % 8], [x, (y + 2) % 8]]
 				if ((mill in CornerList) == False):  # Making sure that the calculated mill is not a corner.
+					print("DOING FOR")
+					for m in linesOccupOld:
+						print("m: ", *m)
+						print("mill: ", mill)
+						if (mill in linesOccupOld):
+							print("This is an old mill you son of a milf")
+						else:
+							print("This is a new mill, Bill")
+							linesOccupNew.append(mill)  # If a mill is present, add it to the list "linesOccupNew".
+							linesOccupOld.append(linesOccupNew)
+							return True
+					print("This is a new mill, Bill2")
 					linesOccupNew.append(mill)  # If a mill is present, add it to the list "linesOccupNew".
+					linesOccupOld.append(linesOccupNew)
+					return True
+
+
+
 
 		# Mill case 2: Changing x (here called "q"),  Constant y (here called "w").
 		for j in range(len(Occup)):
@@ -350,7 +366,21 @@ def isLine(Occup, linesOccup):
 			# Testing whether of not the second point and the third point of a mill are owned by the player.
 			if ((c == True) and (d == True)):
 				mill = [[q, w], [(q + 1), w], [(q + 2), w]]
+				print("DOING FOR")
+				for m in linesOccupOld:
+					print("m: ", *m)
+					print("mill: ", mill)
+					if m[0] == mill:
+						print("This is an old mill you son of a milf")
+					else:
+						print("This is a new mill, Bill3")
+						linesOccupNew.append(mill)  # If a mill is present, add it to the list "linesOccupNew".
+						linesOccupOld.append(linesOccupNew)
+						return True
+				print("This is a new mill, Bill4")
 				linesOccupNew.append(mill)  # If a mill is present, add it to the list "linesOccupNew".
+				linesOccupOld.append(linesOccupNew)
+				return True
 
 		# Determining the range for the loop that establishes whether or not a new mill has been created.
 		if ((len(linesOccupNew)) > (len(linesOccupOld))):
@@ -367,15 +397,25 @@ def isLine(Occup, linesOccup):
 			if (f == 0):  # There seemed to be a problem when lineOccupOld was empty (resulting in f = 0 which prevented the for loop below from executing)
 				f = f + 1  # This just tests for that event and makes the for loop (line81) loop 1 time.
 
+
+		print("This is a new mill, Bill")
+		linesOccupNew.append(mill)  # If a mill is present, add it to the list "linesOccupNew".
+		linesOccupOld.append(linesOccupNew)
+		return True
 			# These print statements are just to test the outputs of each for loop DO NOT INCLUDE THEM IN THE FINAL PROGRAM.
 		#print(f, "t")
 		#print(len(Occup), "Occup")
-		#print(linesOccupOld, "linesOccupOld")
+		#print(linesOccupOld, "linesOccupOld
+		#  ")
 		#print(linesOccupNew, "linesOccupNew")
 
 		# The loop that establishes whether or not a new mill has been created or not.
-		for l in range(f):
-			if ((linesOccupNew[l] in linesOccupOld) == False):
+		for k in range(f):
+			if len(linesOccupNew) == 0:
+				return False
+			else:
+				print(linesOccupNew)
+				linesOccupOld.append(linesOccupNew)
 				return True
 		return False
 
