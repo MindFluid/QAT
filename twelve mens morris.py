@@ -65,22 +65,28 @@ def main():
 	while True:
 		if Player_turn == 1:
 			movePiece(win, ptList, Player_1_index, Player_1.cColour, Player_1.Circles, Player_1, Player_2.Occup, unOccup)
-			#if isLine(Player_1.Occup, linesOccup) == True:
-				#removePiece(win, ptList, Player_2.Circles, Player_2.Occup, unOccup)
+			if blocked(Player_2.Occup, unOccup) == True:
+				print('Player 2 blocked. Game Over')
+				break
+			Player_1_index += 1
+
 			if isLine(Player_1.Occup, Player_1.occupOld) == True:
 				print('Mill detected')
 				removePiece(win, ptList, Player_2.Circles, Player_2.Occup, unOccup,Player_2)
 				Player_2.matchOccup()
 			else:
 				print('No mill')
-			Player_1_index += 1
 			if Player_1_index > 11:
 				Player_1_index = 11
 			Player_turn -= 1
 
 		else:
+
 			print('This should be an AI move')
 			movePiece(win, ptList, Player_2_index, Player_2.cColour, Player_2.Circles, Player_2, Player_1.Occup, unOccup)
+			if blocked(Player_2.Occup, unOccup) == True:
+				print('Player 2 blocked. Game Over')
+				break
 			Player_2_index += 1
 			if isLine(Player_2.Occup, Player_2.occupOld) == True:
 				print('Mill detected')
@@ -130,7 +136,7 @@ def blocked(Occup, unOccup):
     # returns True if all pieces of the Player are blocked otherwise Fals
 	points = []
 
-	if (((len(Occup))<0) or (len(unOccup)) > 24):		# If you have no pieces on the board then you should have either already gotten a game over message, or the game has just started.
+	if ((len(Occup)) <= 0) or (len(unOccup)) > 24:		# If you have no pieces on the board then you should have either already gotten a game over message, or the game has just started.
 		return False
 
 	else:
