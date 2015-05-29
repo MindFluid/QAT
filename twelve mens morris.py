@@ -57,7 +57,6 @@ def main():
 
 
 	Player_turn = 1
-
 	while True:
 		if Player_turn == 1:
 			turnLabel = Text(center, 'Player One Turn')
@@ -66,6 +65,7 @@ def main():
 			if blocked(Player_2.Occup, unOccup) == True:
 				print('Player 2 blocked. Game Over')
 				break
+			#increment index so circles list will not attempt to draw the same circle twice which will raise an error
 			Player_1_index += 1
 			turnLabel.undraw()
 
@@ -90,6 +90,7 @@ def main():
 			if blocked(Player_2.Occup, unOccup) == True:
 				print('Player 2 blocked. Game Over')
 				break
+			#increment index so circles list will not attempt to draw the same circle twice which will raise an error
 			Player_2_index += 1
 			turnLabel.undraw()
 			if isLine(Player_2.Occup, Player_2.occupOld) == True:
@@ -98,7 +99,6 @@ def main():
 				print('Mill detected')
 				removePiece(win, ptList, Player_1.Circles, Player_1.Occup, unOccup, Player_1)
 				Player_1.matchOccup()
-
 			else:
 				print('No mill')
 			if Player_2_index > 11:
@@ -184,7 +184,7 @@ def blocked(Occup, unOccup):
 
 		return True
 
-def movePiece(win, ptList, circle_index, cColor, Circles, Player, Occup, unOccup):#(win,ptList,cColor,Player,Occup,linesOccup,Circles,unOccup):
+def movePiece(win, ptList, circle_index, cColor, Circles, Player, Occup, unOccup):
 	# this function performs a valid move for a Player (1 or 2) and updates the relevant lists
 	# it uses the random function to make a valid move for Player 2 (the computer)
 	# win is the GraphWin object, ptList is defined in drawBoard(), cColor is the color of pieces,
@@ -192,7 +192,7 @@ def movePiece(win, ptList, circle_index, cColor, Circles, Player, Occup, unOccup
 	# of the Player, Circles is a list of the circles (pieces) and unOccup is a list of unOccup locations
 
 
-
+	#print statement used for testing
 	print('movePiece() called')
 	while True:
 
@@ -209,25 +209,29 @@ def movePiece(win, ptList, circle_index, cColor, Circles, Player, Occup, unOccup
 		#if a player has all pieces on the board, wait for a click ON the player's piece
 		else:
 
-			print('Select a token')
+			print('Select a token you would like to move')
 			pt = win.getMouse()
 			nn, minDist, pt_index = findNN(pt, ptList)
 
+			#this make sure a circle is not place if the mouse is near a node but still quite far away
 			if minDist > 20:
 				print('Distance too great. Did not select a circle')
 				continue
 
+			#all pieces have been used, so wait for a click on the player's circle
 			for k in range(len(unOccup)):
 					if unOccup[k] == pt_index:
-						print('found no object')
+						continue
 					else:
 						print('colour change reached')
 						#this iterates through the relevant Player_x.Circles[] and finds a matching circle for the click location
+						#turns the Circle red so the user knows it has been selected and is ready to move
 						for index in range(len(Circles)):
 							a = Circles[index].getCenter()
 							if (a.getX() == nn.x and a.getY() == nn.y):
 								Circles[index].setFill('red')
 
+								#When drawCircle returns False, the click was not valid or on a space, so await another click
 								if drawCircle(win, ptList, circle_index, cColor, Circles, Player, Occup, unOccup) == False:
 									continue
 								else:
@@ -315,9 +319,6 @@ def findNN(pt, ptList):
 
 	#Finding the nearest node to where the user clicked. 'pt' is a variable that is initialized
 	#in movePiece()
-	#currently this doesn't work because ptList[] stores more than 2 Point Objects at ptList[x][y]
-
-	distCheck = 0
 	minDist = -1
 	nn = ptList[0][0]
 	pt_index = [0, 0]
