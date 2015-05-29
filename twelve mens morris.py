@@ -204,6 +204,11 @@ def movePiece(win, ptList, circle_index, cColor, Circles, Player, Occup, unOccup
 			print('Select a token')
 			pt = win.getMouse()
 			nn, minDist, pt_index = findNN(pt, ptList)
+
+			if minDist > 20:
+				print('Distance too great. Did not place circle')
+				continue
+
 			for k in range(len(unOccup)):
 					if unOccup[k] == pt_index:
 						print('found no object')
@@ -217,13 +222,16 @@ def movePiece(win, ptList, circle_index, cColor, Circles, Player, Occup, unOccup
 								#Circles[index].redraw()
 								#print('Circle at: ', pt_index, 'should be red now')
 
-								drawCircle(win, ptList, circle_index, cColor, Circles, Player, Occup, unOccup)
-								Circles[index].undraw()
-								unOccup.append(pt_index)
-								#Player.Occup.remove(pt_index)
-								#Player.matchOccup()
+								if drawCircle(win, ptList, circle_index, cColor, Circles, Player, Occup, unOccup) == False:
+									continue
+								else:
 
-								return
+									Circles[index].undraw()
+									unOccup.append(pt_index)
+									#Player.Occup.remove(pt_index)
+									#Player.matchOccup()
+
+									return
 
 
 
@@ -512,6 +520,10 @@ def removePiece(win,ptList, Circles, Occup, unOccup, Player):#Player,Occup,unOcc
 	while not circleDeleted:
 		click = win.getMouse()
 		nn, minDist, pt_index = findNN(click, ptList)
+
+		if minDist > 20:
+			print('Distance too great. Did not place circle')
+			continue
 
 		i = 0
 
