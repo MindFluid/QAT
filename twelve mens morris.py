@@ -12,12 +12,13 @@ wSize = 600
 allLocs = []
 
 class Player:
-	def __init__(self,Colour):
+	def __init__(self,Colour, Number):
 		self.blocked = False
 		self.Circles = [] # List of player's Total number of pieces.
 		self.cColour = Colour
 		self.Occup = [] # list of locations of player's pieces.
 		self.Number_of_mills = 0
+		self.Number = Number
 		self.linesOccup = [] # Location of player's mills
 		self.occupOld = []
 		turn = 0
@@ -37,6 +38,7 @@ def main():
 	win.setBackground('green')
 	win.setCoords(0,0,wSize,wSize)
 	ptList = drawBoard(win)
+	center = Point(300, 30)
 
 	print(len(ptList), len(ptList[0]))
 	print('allLocs list: ', allLocs)
@@ -46,8 +48,8 @@ def main():
 	unOccup = list(allLocs)
 
 	#initialising Player class with the
-	Player_1 = Player("white")
-	Player_2 = Player("black")
+	Player_1 = Player("white", 1)
+	Player_2 = Player("black", 2)
 	#these index variables are used to increment through the Circles list after every turn so that a new circle will be drawn
 	#or else a graphics error may be raised
 	Player_1_index = 0
@@ -58,16 +60,22 @@ def main():
 
 	while True:
 		if Player_turn == 1:
+			turnLabel = Text(center, 'Player One Turn')
+			turnLabel.draw(win)
 			movePiece(win, ptList, Player_1_index, Player_1.cColour, Player_1.Circles, Player_1, Player_2.Occup, unOccup)
 			if blocked(Player_2.Occup, unOccup) == True:
 				print('Player 2 blocked. Game Over')
 				break
 			Player_1_index += 1
+			turnLabel.undraw()
 
 			if isLine(Player_1.Occup, Player_1.occupOld) == True:
+				turnLabel = Text(center, 'you made a mill! Click to remove an enemy piece')
+				turnLabel.draw(win)
 				print('Mill detected')
 				removePiece(win, ptList, Player_2.Circles, Player_2.Occup, unOccup,Player_2)
 				Player_2.matchOccup()
+				turnLabel.undraw()
 			else:
 				print('No mill')
 			if Player_1_index > 11:
@@ -75,17 +83,22 @@ def main():
 			Player_turn -= 1
 
 		else:
-
+			turnLabel = Text(center, 'Player Two Turn')
+			turnLabel.draw(win)
 			print('This should be an AI move')
 			movePiece(win, ptList, Player_2_index, Player_2.cColour, Player_2.Circles, Player_2, Player_1.Occup, unOccup)
 			if blocked(Player_2.Occup, unOccup) == True:
 				print('Player 2 blocked. Game Over')
 				break
 			Player_2_index += 1
+			turnLabel.undraw()
 			if isLine(Player_2.Occup, Player_2.occupOld) == True:
+				turnLabel = Text(center, 'you made a mill! Click to remove an enemy piece')
+				turnLabel.draw(win)
 				print('Mill detected')
 				removePiece(win, ptList, Player_1.Circles, Player_1.Occup, unOccup, Player_1)
 				Player_1.matchOccup()
+
 			else:
 				print('No mill')
 			if Player_2_index > 11:
@@ -178,7 +191,7 @@ def movePiece(win, ptList, circle_index, cColor, Circles, Player, Occup, unOccup
 	# Occup is a list of occupied locations by the Player, linesOccup is a list of lines (mills)
 	# of the Player, Circles is a list of the circles (pieces) and unOccup is a list of unOccup locations
 
-	occupiedPoint = False
+
 
 	print('movePiece() called')
 	while True:
@@ -186,13 +199,14 @@ def movePiece(win, ptList, circle_index, cColor, Circles, Player, Occup, unOccup
 
 		#if all circles have not been placed (each player has 12), continue to allow Player to draw circles
 		if len(Circles) <= 6:
-
+			#drawCircle will return false if the click was on an Occupied space or too far from a node
+			#when this occurs the program will just wait for a proper click
 			if drawCircle(win, ptList, circle_index, cColor, Circles, Player, Occup, unOccup) == False:
 				continue
 			else:
 				return
 
-		#look for a click on the Player's own circle to attempt a move
+		#if a player has all pieces on the board, wait for a click ON the player's piece
 		else:
 
 			print('Select a token')
@@ -235,6 +249,7 @@ def drawCircle(win, ptList, circle_index, cColor, Circles, Player, Occup, unOccu
 
 	pt = win.getMouse()
 	nn, minDist, pt_index = findNN(pt, ptList)
+
 
 	print('minDist: ', minDist)
 
