@@ -69,7 +69,7 @@ def main():
 				#removePiece(win, ptList, Player_2.Circles, Player_2.Occup, unOccup)
 			if isLine(Player_1.Occup, Player_1.occupOld) == True:
 				print('Mill detected')
-				removePiece(win, ptList, Player_2.Circles, Player_2.Occup, unOccup,Player_1)
+				removePiece(win, ptList, Player_2.Circles, Player_2.Occup, unOccup,Player_2)
 				Player_2.matchOccup()
 			else:
 				print('No mill')
@@ -84,7 +84,7 @@ def main():
 			Player_2_index += 1
 			if isLine(Player_2.Occup, Player_2.occupOld) == True:
 				print('Mill detected')
-				removePiece(win, ptList, Player_1.Circles, Player_1.Occup, unOccup, Player_2)
+				removePiece(win, ptList, Player_1.Circles, Player_1.Occup, unOccup, Player_1)
 				Player_1.matchOccup()
 			else:
 				print('No mill')
@@ -173,6 +173,8 @@ def blocked(Occup, unOccup):
 
 
 
+
+
 def movePiece(win, ptList, circle_index, cColor, Circles, Player, Occup, unOccup):#(win,ptList,cColor,Player,Occup,linesOccup,Circles,unOccup):
 	# this function performs a valid move for a Player (1 or 2) and updates the relevant lists
 	# it uses the random function to make a valid move for Player 2 (the computer)
@@ -186,9 +188,8 @@ def movePiece(win, ptList, circle_index, cColor, Circles, Player, Occup, unOccup
 	while True:
 
 
-		#if all circles have not been placed (each player has 12), continue to allow user to draw circles for player
-
-		if len(Circles) <= 2:
+		#if all circles have not been placed (each player has 12), continue to allow Player to draw circles
+		if len(Circles) <= 6:
 
 			if drawCircle(win, ptList, circle_index, cColor, Circles, Player, Occup, unOccup) == False:
 				continue
@@ -197,39 +198,34 @@ def movePiece(win, ptList, circle_index, cColor, Circles, Player, Occup, unOccup
 
 		#look for a click on the Player's own circle to attempt a move
 		else:
-			#index variable
-			i = 0
-			'''pt = win.getMouse()
-			nn, minDist, pt_index = findNN(pt, ptList)'''
+
 			print('Select a token')
 			pt = win.getMouse()
 			nn, minDist, pt_index = findNN(pt, ptList)
 
 			if minDist > 20:
-				print('Distance too great. Did not place circle')
+				print('Distance too great. Did not select a circle')
 				continue
 
 			for k in range(len(unOccup)):
 					if unOccup[k] == pt_index:
 						print('found no object')
-
 					else:
 						print('colour change reached')
+						#this iterates through the relevant Player_x.Circles[] and finds a matching circle for the click location
 						for index in range(len(Circles)):
 							a = Circles[index].getCenter()
 							if (a.getX() == nn.x and a.getY() == nn.y):
 								Circles[index].setFill('red')
-								#Circles[index].redraw()
-								#print('Circle at: ', pt_index, 'should be red now')
 
 								if drawCircle(win, ptList, circle_index, cColor, Circles, Player, Occup, unOccup) == False:
 									continue
 								else:
 
 									Circles[index].undraw()
+									Player.Occup.remove(pt_index)
+									Player.occupOld.remove(pt_index)
 									unOccup.append(pt_index)
-									#Player.Occup.remove(pt_index)
-									#Player.matchOccup()
 
 									return
 
@@ -243,6 +239,8 @@ def drawCircle(win, ptList, circle_index, cColor, Circles, Player, Occup, unOccu
 
 	pt = win.getMouse()
 	nn, minDist, pt_index = findNN(pt, ptList)
+
+	print('minDist: ', minDist)
 
 	if minDist > 20:
 			print('Distance too great. Did not place circle')
@@ -532,16 +530,21 @@ def removePiece(win,ptList, Circles, Occup, unOccup, Player):#Player,Occup,unOcc
 		for index in range(len(Circles)):
 			a = Circles[i].getCenter()
 			if (a.getX() == nn.x and a.getY() == nn.y):
-				print('Length of Circles BEFORE undraw: ', len(Circles))
-				Circles[index].undraw()
-				print('Length of Circles AFTER undraw: ', len(Circles))
-				Occup.remove(pt_index)
-				print('removed point from Occup. Updated Occup[]: ', Occup)
-				unOccup.append(pt_index)
-				print('Appended new open location to unOccup. Updated unOccup[]: ', unOccup)
-				print('removePiece() breaks')
-				circleDeleted = True
-				break
+
+				if isLine(Player.Occup, Player.occupOld) == True:
+					print('Cannot remove a piece in a mill')
+					continue
+				else:
+					print('Length of Circles BEFORE undraw: ', len(Circles))
+					Circles[index].undraw()
+					print('Length of Circles AFTER undraw: ', len(Circles))
+					Occup.remove(pt_index)
+					print('removed point from Occup. Updated Occup[]: ', Occup)
+					unOccup.append(pt_index)
+					print('Appended new open location to unOccup. Updated unOccup[]: ', unOccup)
+					print('removePiece() breaks')
+					circleDeleted = True
+					break
 			else:
 				i += 1
 
