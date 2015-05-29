@@ -199,9 +199,11 @@ def movePiece(win, ptList, circle_index, cColor, Circles, Player, Occup, unOccup
 		else:
 			#index variable
 			i = 0
+			'''pt = win.getMouse()
+			nn, minDist, pt_index = findNN(pt, ptList)'''
+			print('Select a token')
 			pt = win.getMouse()
 			nn, minDist, pt_index = findNN(pt, ptList)
-			print('Circle select reached')
 			for k in range(len(unOccup)):
 					if unOccup[k] == pt_index:
 						print('found no object')
@@ -213,7 +215,7 @@ def movePiece(win, ptList, circle_index, cColor, Circles, Player, Occup, unOccup
 							if (a.getX() == nn.x and a.getY() == nn.y):
 								Circles[index].setFill('red')
 								#Circles[index].redraw()
-								print('Circle at: ', pt_index, 'should be red now')
+								#print('Circle at: ', pt_index, 'should be red now')
 
 								drawCircle(win, ptList, circle_index, cColor, Circles, Player, Occup, unOccup)
 								Circles[index].undraw()
