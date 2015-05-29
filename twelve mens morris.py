@@ -186,52 +186,10 @@ def movePiece(win, ptList, circle_index, cColor, Circles, Player, Occup, unOccup
 	while True:
 
 
-		#pt = win.getMouse()
-		#nn, minDist, pt_index = findNN(pt, ptList)
-
-
-		'''#test statements
-		print('Clicked at: ', pt)
-		print('Nearest point: ', nn)
-		print('Distance: ', minDist)'''
-
-		#if distance is too large, a circle will not be placed
-		'''print('Length of Circles: ', len(Circles))
-		if minDist > 20:
-			print('Distance too great. Did not place circle')
-			continue'''
-
-
 		#if all circles have not been placed (each player has 12), continue to allow user to draw circles for player
 
 		if len(Circles) <= 2:
 
-			'''#This loop is supposed to check the list unOccup (a list of unoccupied points) and if it
-			#matches a spot, draw the circle
-			for k in range(len(unOccup)):
-					if unOccup[k] == pt_index:
-						#print('No object here')
-						#print(pt_index)
-
-						circ = Circle(nn, 20)
-						circ.setFill(cColor)
-						Circles.append(circ)
-
-						#print statements for test purposes
-						#print('circles list length: ', len(Circles))
-						#print('Circle Object: ', Circles[circle_index])
-						#print('circle_index: ', circle_index)
-						Circles[circle_index].draw(win)
-
-						#update Occup and unOccup
-						Player.occupOld = Player.Occup.copy()
-						Player.Occup.append(pt_index)
-						try:
-							unOccup.remove(pt_index)
-							print('removed from unOcupp')
-							return #returns nothing
-						except:
-							print('!!!could not remove from unOccup!!!')'''
 			if drawCircle(win, ptList, circle_index, cColor, Circles, Player, Occup, unOccup) == False:
 				continue
 			else:
@@ -569,6 +527,7 @@ def removePiece(win,ptList, Circles, Occup, unOccup, Player):#Player,Occup,unOcc
 				print('Appended new open location to unOccup. Updated unOccup[]: ', unOccup)
 				print('removePiece() breaks')
 				circleDeleted = True
+				break
 			else:
 				i += 1
 
