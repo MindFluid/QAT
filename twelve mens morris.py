@@ -12,17 +12,17 @@ wSize = 600
 allLocs = []
 
 class Player:
-	def __init__(self,Colour,Player_number):
+	def __init__(self,Colour):
 		self.blocked = False
 		self.Circles = [] # List of player's Total number of pieces.
 		self.cColour = Colour
-		self.Player_number = Player_number
 		self.Occup = [] # list of locations of player's pieces.
 		self.Number_of_mills = 0
 		self.linesOccup = [] # Location of player's mills
 		self.occupOld = []
 		turn = 0
 
+	#matches occupOld to Occup for use in detecting mills
 	def matchOccup(self):
 		self.occupOld = self.Occup
 
@@ -34,26 +34,20 @@ def main():
 	# alternately, if a mill is made, invites the player to remove opponents piece and decides which
 	# player has won. Uses the random function for Player 2 (the computer)
 	win = GraphWin('QAT',wSize,wSize)
-
 	win.setBackground('green')
 	win.setCoords(0,0,wSize,wSize)
 	ptList = drawBoard(win)
 
-	#Circle(ptList[0][0], 20).draw(win)
-
-	#print statements to see lists
 	print(len(ptList), len(ptList[0]))
 	print('allLocs list: ', allLocs)
-	print(len(allLocs))
-	print('ptList: ', ptList)
+
 
 	#unOccup is a list of locations and is deleted from/added to as locations become taken or available
 	unOccup = list(allLocs)
-	print(unOccup[0])
 
-	Player_1 = Player("white",1)
-	Player_2 = Player("black",2)
-
+	#initialising Player class with the
+	Player_1 = Player("white")
+	Player_2 = Player("black")
 	#these index variables are used to increment through the Circles list after every turn so that a new circle will be drawn
 	#or else a graphics error may be raised
 	Player_1_index = 0
@@ -177,10 +171,6 @@ def blocked(Occup, unOccup):
 
 		return True
 
-
-
-
-
 def movePiece(win, ptList, circle_index, cColor, Circles, Player, Occup, unOccup):#(win,ptList,cColor,Player,Occup,linesOccup,Circles,unOccup):
 	# this function performs a valid move for a Player (1 or 2) and updates the relevant lists
 	# it uses the random function to make a valid move for Player 2 (the computer)
@@ -273,9 +263,6 @@ def drawCircle(win, ptList, circle_index, cColor, Circles, Player, Occup, unOccu
 
 	return False
 
-
-
-
 def drawBoard(win):
 	# draws the board and populates the gobal list allLocs[] which contains all valid locations in ptList
 	# returns ptList which is a 3x8 list of lists containing Point objects. At the top level it contains
@@ -304,7 +291,6 @@ def drawBoard(win):
 
 def square(x):
 	return x * x
-
 
 def findNN(pt, ptList):
 	# finds the nearest location to a point pt in ptList so that the user is only required
@@ -408,7 +394,6 @@ def isLine(Occup, occupOld):
 	else:
 		print("NO")
 		return False
-
 
 
 def removePiece(win,ptList, Circles, Occup, unOccup, Player):#Player,Occup,unOccup,linesOccup,Circles):
